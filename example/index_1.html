@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Example</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style>
+            label, input {
+                display: block;
+            }
+            input[type="button"] {
+                margin-top: 10px;
+            }
+            div[data-element="output"] {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <form>
+            <label>Name:</label>
+            <input type="text" name="name" />
+            <label>Address:</label>
+            <input type="text" name="address" />
+            <input type="button" value="register" />
+        </form>
+        <div data-element="output"></div>
+
+        <script src="../lib/deb.js"></script>
+        <!--<script src="../build/deb.min.js"></script>-->
+        <script src="jquery.js"></script>
+        <script>
+
+            var Module = {
+                collectData: function(cb) {
+                    var name = $('[name="name"]').val();
+                    var address = $('[name="address"]').val();
+                    if(name != '' && address != '') {
+                        cb(null, { name: name, address: address });
+                    } else {
+                        cb({msg: 'Missing data'});
+                    }
+                },
+                error: function(err) {
+                    $('[data-element="output"]').html(err.msg);
+                },
+                success: function(data) {
+                    $('[data-element="output"]').html('Hello ' + data.name + '!');
+                }
+            }
+
+            $('[value="register"]').on('click', function() {
+                Module.collectData(function(err, data) {
+                    if(typeof err === 'object') {
+                        Module.error(err);
+                    } else {
+                        Module.success(data);
+                    }
+                });
+            });
+
+        </script>
+    </body>
+</html>
