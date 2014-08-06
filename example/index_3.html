@@ -40,7 +40,8 @@
                     } else {
                         cb({msg: 'Missing data'});
                     }
-                },
+                    return '';
+                }.deb('Module.collectData...'),
                 error: function(err) {
                     $('[data-element="output"]').html(err.msg);
                 },
@@ -53,12 +54,12 @@
                 $('[value="register"]').on('click', function() {
                     Module.collectData(function(err, data) {
                         console.log('Object? %O', err, typeof err);
-                        if(typeof err === 'object') {
+                        if(err) {
                             Module.error(err);
                         } else {
                             Module.success(data);
                         }
-                    });
+                    }.deb('my potentially bug infested function'));
                 });
             }
 
